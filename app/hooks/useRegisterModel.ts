@@ -6,10 +6,10 @@ interface RegisterModelStore{
     onClose : () => void;
 }
 
-const useRegisterModel = create<RegisterModelStore>((set)=>({
+const useRegisterModel = create<RegisterModelStore>((set) => ({
     isOpen : false,
-    onOpen : ()=> set({isOpen : true}),
-    onClose : () => set({isOpen : false})
-}))
+    onOpen : () => set({ isOpen : true }),
+    onClose : () => set({ isOpen : false })
+}));
 
 export default useRegisterModel

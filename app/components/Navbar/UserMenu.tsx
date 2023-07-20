@@ -5,10 +5,22 @@ import Avatar from '../Avatar'
 import { useCallback, useState } from 'react'
 import MenuItem from './MenuItem'
 import useRegisterModel from '@/app/hooks/useRegisterModel'
+import useLoginModal from '@/app/hooks/useLoginModal'
+import LoginModal from '../Modals/LoginModal'
+import {User} from '@prisma/client'
+import { signOut } from 'next-auth/react'
+import { SafeUser } from '@/app/types'
 
-export default function UserMenu() {
+interface UserMenuProps{
+  currentUser? : SafeUser | null
+}
+
+const UserMenu: React.FC<UserMenuProps> = ({
+  currentUser
+}) => {
     const [isOpen, setisOpen] = useState(false)
     const registerModal = useRegisterModel()
+    const loginModal = useLoginModal()
     const toggleOpen = useCallback(
       () => {
         setisOpen((value)=> !value)
@@ -60,7 +72,7 @@ export default function UserMenu() {
              '>
                 <AiOutlineMenu />
                 <div className='hidden md:block'>
-                    <Avatar/>
+                    <Avatar src={currentUser?.image}/>
                 </div>
              </div>
         </div>
@@ -79,16 +91,46 @@ export default function UserMenu() {
                 text-sm
             '>
                 <div className='flex flex-col cursor-pointer'>
-                    <>
+                   {currentUser ? (
+                     <>
                      <MenuItem
                         onClick={()=>{}}
-                        label='Login'
+                        label='My Trips'
                      />
                      <MenuItem
-                        onClick={registerModal.onOpen}
-                        label='Signup'
+                        onClick={()=>{}}
+                        label='My Favorites'
+                     />
+                     <MenuItem
+                        onClick={()=>{}}
+                        label='My Reservations'
+                     />
+                     <MenuItem
+                        onClick={()=>{}}
+                        label='My Properties'
+                     />
+                     <MenuItem
+                        onClick={()=>{}}
+                        label='Become A Host'
+                     />
+                     <hr className='border-blue-400' />
+                     <MenuItem
+                        onClick={()=> signOut()}
+                        label='LogOut'
                      />
                     </>
+                   ) : (
+                    <>
+                    <MenuItem
+                       onClick={loginModal.onOpen}
+                       label='Login'
+                    />
+                    <MenuItem
+                       onClick={registerModal.onOpen}
+                       label='Signup'
+                    />
+                   </>
+                   )}
                 </div>
             </div>
         )}
@@ -96,3 +138,5 @@ export default function UserMenu() {
     </div>
   )
 }
+
+export default UserMenu

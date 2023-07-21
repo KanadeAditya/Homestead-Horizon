@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-  <div className='text-rose-500 text-2xl'>hello Homestead Horizon 
+  <div className='bg-blue-100 h-full -z-10'>hello Homestead Horizon 
   </div>
   )
 }

@@ -7,6 +7,7 @@ import Search from './Search'
 import UserMenu from './UserMenu'
 import {User} from '@prisma/client'
 import { SafeUser } from '@/app/types'
+import Categories from './Categories'
 
 interface NavbarProps{
     currentUser? : SafeUser | null
@@ -16,15 +17,17 @@ const Navbar: React.FC<NavbarProps> = ({
     currentUser
 }) => {
   return (
-    <div className='fixed w-full bg-primary z-10 shadow-sm'>
+    <div className='fixed w-full z-10 shadow-sm  bg-blue-300'>
         <div
         className='
+            bg-primary
             py-4 
             border-b-[1px]
         '
         >
             <Container>
             <div className='
+               
                 flex
                 flex-row
                 items-center
@@ -39,6 +42,7 @@ const Navbar: React.FC<NavbarProps> = ({
         </Container>
 
         </div>
+        <Categories/>
     </div>
   )
 }

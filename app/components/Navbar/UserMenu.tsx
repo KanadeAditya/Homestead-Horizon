@@ -10,6 +10,7 @@ import LoginModal from '../Modals/LoginModal'
 import {User} from '@prisma/client'
 import { signOut } from 'next-auth/react'
 import { SafeUser } from '@/app/types'
+import useRentModal from '@/app/hooks/useRentModal'
 
 interface UserMenuProps{
   currentUser? : SafeUser | null
@@ -21,6 +22,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
     const [isOpen, setisOpen] = useState(false)
     const registerModal = useRegisterModel()
     const loginModal = useLoginModal()
+    const rentModal = useRentModal()
     const toggleOpen = useCallback(
       () => {
         setisOpen((value)=> !value)
@@ -28,6 +30,14 @@ const UserMenu: React.FC<UserMenuProps> = ({
       [],
     )
     
+    const onRent = useCallback(() => {
+      if (!currentUser) {
+        return loginModal.onOpen();
+      }
+  
+      rentModal.onOpen();
+    }, [loginModal, rentModal, currentUser]);
+  
 
   return (
     <div className='relative'>
@@ -38,7 +48,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
             gap-3
         '>
              <div 
-             onClick={()=>{}}
+             onClick={onRent}
               className='
              hidden
              md:block
@@ -110,7 +120,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
                         label='My Properties'
                      />
                      <MenuItem
-                        onClick={()=>{}}
+                        onClick={onRent}
                         label='Become A Host'
                      />
                      <hr className='border-blue-400' />

@@ -14,8 +14,6 @@ import { useMemo, useState } from "react";
 import useRentModal from '@/app/hooks/useRentModal';
 
 import Modal from "./Modal";
-// import CategoryInput from '../inputs/CategoryInput';
-// import Input from '../inputs/Input';
 import Heading from '../Heading';
 import { categories } from '../Navbar/Categories';
 import CategoryBox from '../Inputs/CategoryInput';
@@ -87,35 +85,90 @@ const RentModal = () => {
     setStep((value) => value - 1);
   }
 
-  const onNext = () => {
-    setStep((value) => value + 1);
+  const onNext = (param?:number) => {
+    if(param){
+      setStep(param)
+    }else{
+      setStep((value) => value + 1);
+    }
   }
+
+  interface PropertyTypes {
+    category: string;
+    location: object;
+    guestCount: number;
+    roomCount: number;
+    bathroomCount: number;
+    imageSrc: string;
+    price: number;
+    title: string;
+    description: string;
+  }
+  
+  function checkDataObject(data: Partial<PropertyTypes>): number{
+    const propertiesInOrder: (keyof PropertyTypes)[] = [
+      "category",
+      "location",
+      "guestCount",
+      "roomCount",
+      "bathroomCount",
+      "imageSrc",
+      "title",
+      "description",
+      "price",
+    ];
+  
+    for (const prop of propertiesInOrder) {
+      let unavailable:string = ''
+      if (!(prop in data) || data[prop] === "" || data[prop] === null) {
+        unavailable = prop
+      }
+
+      if(unavailable === "category"){
+        return STEPS.CATEGORY
+      }else if(unavailable === "location"){
+        return STEPS.LOCATION
+      }else if(unavailable === "guestCount" || unavailable === "roomCount" || unavailable === "bathroomCount"){
+        return STEPS.INFO
+      }else if(unavailable === "title" || unavailable === "description" ){
+        return STEPS.DESCRIPTION
+      }else if(unavailable === "price" ){
+        return STEPS.PRICE
+      }else if(unavailable === "imageSrc" ){
+        return STEPS.IMAGES
+      }
+    }
+      return -1
+     // All properties are present and have the correct types.
+  }
+  
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    let stat = checkDataObject(data)
+    console.log(stat)
     if (step !== STEPS.PRICE) {
       return onNext();
+    }else if(stat !== -1 && step === STEPS.PRICE){
+      console.log("S")
+      return onNext(stat)
     }
     setIsLoading(true);
-    console.log(data)
-    // axios.post('/api/listings', data)
-    // .then(() => {
-    //   toast.success('Listing created!');
-    //   router.refresh();
-    //   reset();
-    //   setStep(STEPS.CATEGORY)
-    //   rentModal.onClose();
-    // })
-    // .catch(() => {
-    //   toast.error('Something went wrong.');
-    // })
-    // .finally(() => {
-    //   setIsLoading(false);
-    // })
-    // toast.success('Listing created!');
-    //   router.refresh();
-    //   reset();
-    //   setStep(STEPS.CATEGORY)
-    //   rentModal.onClose();
-    //   setIsLoading(false);
+
+    axios.post('/api/listings', data)
+    .then(() => {
+      toast.success('Listing created!');
+      router.refresh();
+      reset();
+      setStep(STEPS.CATEGORY)
+      rentModal.onClose();
+    })
+    .catch(() => {
+      toast.error('Something went wrong.');
+    })
+    .finally(() => {
+      setIsLoading(false);
+    })
+    
   }
 
   const actionLabel = useMemo(() => {

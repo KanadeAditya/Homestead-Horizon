@@ -8,6 +8,7 @@ import LoginModal from './components/Modals/LoginModal'
 import getCurrentUser from './actions/getCurrentUser'
 import RegisterModal from './components/modals/RegisterModal'
 import RentModal from './components/modals/RentModal'
+import SearchModal from './components/modals/SearchModal'
 
 const font = Poppins({
   subsets: ['latin'],
@@ -31,6 +32,7 @@ export default async function RootLayout({
       <body className={font.className}>
         <ToasterProvider/>
         <RentModal/>
+        <SearchModal/>
         <RegisterModal/>
         <LoginModal/>
         <Navbar currentUser = {currentUser} />

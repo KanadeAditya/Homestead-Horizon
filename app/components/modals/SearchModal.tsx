@@ -16,7 +16,7 @@ import CountrySelect, {
   CountrySelectValue
 } from "../Inputs/CountrySelect";
 import Heading from '../Heading';
-import Modal from './Modal';
+import Modal from '@/app/components/modals/Modal';
 
 enum STEPS {
   LOCATION = 0,
